@@ -79,3 +79,10 @@ datadog logs tail --query "status:error" --pretty
 ```bash
 datadog logs search --query "status:error" --from 24h --limit 1000 --output errors.json
 ```
+
+**Dashboard Management:**
+```bash
+datadog dashboards list --pretty                                      # List all dashboards
+datadog dashboards get --id "DASHBOARD_ID" --pretty                   # Get dashboard details
+datadog dashboard-lists list --pretty                                 # List dashboard lists
+```
