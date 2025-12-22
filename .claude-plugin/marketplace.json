@@ -6,16 +6,23 @@
   },
   "metadata": {
     "description": "Datadog CLI tools for debugging and triaging with logs, metrics, and dashboards",
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
   "plugins": [
     {
       "name": "datadog",
       "source": "./",
       "description": "Datadog CLI commands and skills for debugging and triaging with Datadog logs, metrics, and dashboards",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "category": "observability",
-      "tags": ["datadog", "logs", "metrics", "debugging", "triage", "dashboards"]
+      "tags": [
+        "datadog",
+        "logs",
+        "metrics",
+        "debugging",
+        "triage",
+        "dashboards"
+      ]
     }
   ]
 }
