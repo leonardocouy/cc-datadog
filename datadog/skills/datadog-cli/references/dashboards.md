@@ -196,13 +196,24 @@ datadog dashboards update \
 ### Update Workflow (Get -> Modify -> Update)
 
 ```bash
-# 1. Get current dashboard
-datadog dashboards get --id "abc-def-ghi" --output current.json
+# 1. Get current dashboard and save to file
+npx @leoflores/datadog-cli dashboards get --id "abc-def-ghi" > /tmp/dashboard.json
 
-# 2. Modify the JSON file as needed (manually or via jq)
+# 2. Extract widgets array
+cat /tmp/dashboard.json | jq '.dashboard.widgets' > /tmp/widgets.json
 
-# 3. Update with new configuration
-# Note: You need to extract and pass the required fields
+# 3. Modify the widgets JSON as needed (edit file or use jq)
+# Example: Make a query dynamic by grouping
+# Before: "query": "sum:metric{app:emback}.as_count()"
+# After:  "query": "sum:metric{$app} by {app}.as_count()"
+
+# 4. Update dashboard by piping modified widgets
+cat /tmp/widgets.json | npx @leoflores/datadog-cli dashboards update \
+  --id "abc-def-ghi" \
+  --title "Dashboard Title" \
+  --layout ordered \
+  --template-variables '[{"name":"app","prefix":"app","default":"*"}]' \
+  --pretty
 ```
 
 ## Deleting Dashboards
