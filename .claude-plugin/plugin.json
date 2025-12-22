@@ -1,7 +1,7 @@
 {
   "name": "datadog",
   "description": "Datadog CLI commands and skills for debugging and triaging with Datadog logs, metrics, and dashboards",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": {
     "name": "Leonardo Flores",
     "email": "contato@leonardocouy.com"
