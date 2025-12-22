@@ -1,14 +1,21 @@
 {
   "name": "datadog",
   "description": "Datadog CLI commands and skills for debugging and triaging with Datadog logs, metrics, and dashboards",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "Leonardo Flores",
     "email": "contato@leonardocouy.com"
   },
   "repository": "https://github.com/leonardocouy/cc-datadog",
   "license": "MIT",
-  "keywords": ["datadog", "observability", "logs", "metrics", "debugging", "triage"],
+  "keywords": [
+    "datadog",
+    "observability",
+    "logs",
+    "metrics",
+    "debugging",
+    "triage"
+  ],
   "commands": "./datadog/commands",
   "agents": "./datadog/skills/datadog-cli/SKILL.md"
 }
