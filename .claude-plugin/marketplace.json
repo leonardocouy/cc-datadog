@@ -5,16 +5,20 @@
     "email": "contato@leonardocouy.com"
   },
   "metadata": {
-    "description": "Datadog CLI tools for debugging and triaging with logs, metrics, and dashboards",
+    "description": "Datadog CLI skill for debugging and triaging with logs, metrics, and dashboards",
     "version": "1.2.0"
   },
   "plugins": [
     {
       "name": "datadog",
-      "source": "./",
-      "description": "Datadog CLI commands and skills for debugging and triaging with Datadog logs, metrics, and dashboards",
+      "description": "Datadog CLI skill for debugging and triaging with logs, metrics, and dashboards",
       "version": "1.2.0",
+      "source": "./",
       "category": "observability",
+      "author": {
+        "name": "Leonardo Flores",
+        "email": "contato@leonardocouy.com"
+      },
       "tags": [
         "datadog",
         "logs",
