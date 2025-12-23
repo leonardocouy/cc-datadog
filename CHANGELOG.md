@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/leonardocouy/cc-datadog/compare/v1.2.0...v1.3.0) (2025-12-23)
+
+
+### Features
+
+* revamp ([43b1da2](https://github.com/leonardocouy/cc-datadog/commit/43b1da2ded80b00b5e88691dc67bbe851bba0e22))
+
 ## [1.2.0](https://github.com/leonardocouy/cc-datadog/compare/v1.1.0...v1.2.0) (2025-12-22)
 
 
