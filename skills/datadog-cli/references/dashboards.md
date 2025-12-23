@@ -23,25 +23,23 @@ npx @leoflores/datadog-cli dashboards update \
 
 **ALWAYS follow this 3-step process when updating dashboards:**
 
-### Step 1: Backup the Current Dashboard
+> ⚠️ **Important:** Always use `--output` to save to a temp file instead of capturing output in a bash variable. JSON with special characters, newlines, or ANSI codes can break `jq` parsing when piped through `echo`.
+
+### Step 1: Backup the Current Dashboard to a Temp File
 ```bash
 # Save the current dashboard state BEFORE any changes
-npx @leoflores/datadog-cli dashboards get --id "abc-def-ghi" > dashboard-backup.json
+# Using --output ensures clean JSON without encoding issues
+npx @leoflores/datadog-cli dashboards get --id "abc-def-ghi" --output /tmp/dashboard.json
 ```
 
 ### Step 2: Modify and Preserve All Fields
 ```bash
-# Extract existing values and modify only what you need
-DASHBOARD_JSON=$(npx @leoflores/datadog-cli dashboards get --id "abc-def-ghi")
-
-# Get existing template variables (MUST be preserved!)
-TEMPLATE_VARS=$(echo "$DASHBOARD_JSON" | jq -c '.dashboard.templateVariables // []')
-
-# Get existing description (MUST be preserved!)
-DESCRIPTION=$(echo "$DASHBOARD_JSON" | jq -r '.dashboard.description // ""')
+# Extract existing values directly from the file (not through echo!)
+TEMPLATE_VARS=$(jq -c '.dashboard.templateVariables // []' /tmp/dashboard.json)
+DESCRIPTION=$(jq -r '.dashboard.description // ""' /tmp/dashboard.json)
 
 # Modify widgets (example: change title of widget at index 1)
-WIDGETS=$(echo "$DASHBOARD_JSON" | jq -c '.dashboard.widgets | .[1].definition.title = "New Title"')
+WIDGETS=$(jq -c '.dashboard.widgets | .[1].definition.title = "New Title"' /tmp/dashboard.json)
 
 # Update with ALL fields preserved
 npx @leoflores/datadog-cli dashboards update \
@@ -62,13 +60,12 @@ npx @leoflores/datadog-cli dashboards get --id "abc-def-ghi" --pretty
 
 ### Recovery from Accidental Data Loss
 ```bash
-# If you have a backup, restore from it
-BACKUP=$(cat dashboard-backup.json)
-WIDGETS=$(echo "$BACKUP" | jq -c '.dashboard.widgets')
-TEMPLATE_VARS=$(echo "$BACKUP" | jq -c '.dashboard.templateVariables // []')
-DESCRIPTION=$(echo "$BACKUP" | jq -r '.dashboard.description // ""')
-TITLE=$(echo "$BACKUP" | jq -r '.dashboard.title')
-LAYOUT=$(echo "$BACKUP" | jq -r '.dashboard.layoutType')
+# If you have a backup file, restore from it
+WIDGETS=$(jq -c '.dashboard.widgets' /tmp/dashboard.json)
+TEMPLATE_VARS=$(jq -c '.dashboard.templateVariables // []' /tmp/dashboard.json)
+DESCRIPTION=$(jq -r '.dashboard.description // ""' /tmp/dashboard.json)
+TITLE=$(jq -r '.dashboard.title' /tmp/dashboard.json)
+LAYOUT=$(jq -r '.dashboard.layoutType' /tmp/dashboard.json)
 
 npx @leoflores/datadog-cli dashboards update \
   --id "abc-def-ghi" \
@@ -78,6 +75,20 @@ npx @leoflores/datadog-cli dashboards update \
   --description "$DESCRIPTION" \
   --template-variables "$TEMPLATE_VARS" \
   --pretty
+```
+
+### Why Use Files Instead of Variables?
+
+❌ **Don't do this** - prone to parsing errors:
+```bash
+DASHBOARD_JSON=$(npx @leoflores/datadog-cli dashboards get --id "abc-def-ghi")
+WIDGETS=$(echo "$DASHBOARD_JSON" | jq -c '.dashboard.widgets')  # May fail!
+```
+
+✅ **Do this** - reliable with any JSON content:
+```bash
+npx @leoflores/datadog-cli dashboards get --id "abc-def-ghi" --output /tmp/dashboard.json
+WIDGETS=$(jq -c '.dashboard.widgets' /tmp/dashboard.json)  # Always works
 ```
 
 ## Commands Overview
