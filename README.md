@@ -1,25 +1,23 @@
-# Datadog Claude Code Marketplace
+# datadog Plugin
 
-Claude Code plugin for debugging and triaging with [Datadog](https://www.datadoghq.com/) logs, metrics, and dashboards.
+A Claude Code skill for debugging and triaging with [Datadog](https://www.datadoghq.com/) logs, metrics, and dashboards.
 
-## Quickstart
+## What it does
 
-Open Claude Code, choose `/Plugin` to interactively add the marketplace `leonardocouy/cc-datadog`, or:
+This skill enables Claude to use the [datadog](https://github.com/leonardocouy/datadog-cli) CLI for:
 
-```bash
-claude /plugin marketplace add leonardocouy/cc-datadog
-claude /plugin install datadog@cc-datadog
-```
+- **Log search** - Query and filter logs with Datadog syntax
+- **Real-time tailing** - Stream logs as they arrive
+- **Trace analysis** - Follow distributed requests across services
+- **Pattern detection** - Group similar log messages automatically
+- **Metrics query** - Query timeseries metrics with PromQL-style syntax
+- **Dashboard management** - List, create, update, and delete dashboards
 
-For local development or fork:
+## Prerequisites
 
-```bash
-# Change the path on 'add' to your path.
-claude /plugin marketplace add ./
-```
+1. Install the CLI from [leonardocouy/datadog-cli](https://github.com/leonardocouy/datadog-cli)
 
-### Environment Variables (Required)
-
+2. Set environment variables:
 ```bash
 export DD_API_KEY="your-api-key"
 export DD_APP_KEY="your-app-key"
@@ -27,62 +25,48 @@ export DD_APP_KEY="your-app-key"
 
 Get keys from: https://app.datadoghq.com/organization-settings/api-keys
 
-## Plugin: datadog
+## Installation
 
-Use this plugin when you need to search Datadog logs, query metrics, tail logs in real-time, trace distributed requests, investigate errors, compare time periods, find log patterns, check service health, manage dashboards, or export observability data.
-
-**Trigger phrases:** "search logs", "tail logs", "query metrics", "check Datadog", "find errors", "trace request", "compare errors", "what services exist", "log patterns", "CPU usage", "service health", "dashboard", "dashboards"
-
-### Commands
-
-| Command | Description |
-|---------|-------------|
-| `logs search` | Search and filter logs |
-| `logs agg` | Aggregate logs by facet |
-| `logs tail` | Stream logs in real-time |
-| `logs trace` | Find logs for a trace ID |
-| `logs context` | Get logs around a timestamp |
-| `logs patterns` | Group similar log messages |
-| `logs compare` | Compare current vs previous period |
-| `logs multi` | Run multiple queries in parallel |
-| `metrics query` | Query timeseries metrics |
-| `dashboards list` | List dashboards |
-| `dashboards get` | Get a dashboard definition |
-| `dashboards create` | Create a dashboard |
-| `dashboards update` | Update a dashboard |
-| `dashboards delete` | Delete a dashboard |
-| `dashboard-lists list` | List dashboard lists |
-| `dashboard-lists get` | Get a dashboard list |
-| `dashboard-lists create` | Create a dashboard list |
-| `dashboard-lists update` | Update a dashboard list |
-| `dashboard-lists delete` | Delete a dashboard list |
-| `errors` | Quick error summary |
-| `services` | List services with log activity |
-
-### Example Workflows
-
-**Incident Triage:**
 ```bash
-datadog errors --from 1h --pretty                                    # Overview
-datadog logs compare --query "status:error" --period 1h --pretty     # Is this new?
-datadog logs patterns --query "status:error" --from 1h --pretty      # What patterns?
-datadog logs search --query "status:error service:api" --from 1h --pretty  # Drill down
-datadog logs trace --id "TRACE_ID" --pretty                          # Follow trace
+/plugin marketplace add leonardocouy/cc-datadog
+/plugin install datadog@cc-datadog
 ```
 
-**Real-time Monitoring:**
-```bash
-datadog logs tail --query "status:error" --pretty
-```
+## Usage
 
-**Export for Analysis:**
-```bash
-datadog logs search --query "status:error" --from 24h --limit 1000 --output errors.json
-```
+Once installed, Claude will automatically use datadog commands when you ask questions like:
 
-**Dashboard Management:**
-```bash
-datadog dashboards list --pretty                                      # List all dashboards
-datadog dashboards get --id "DASHBOARD_ID" --pretty                   # Get dashboard details
-datadog dashboard-lists list --pretty                                 # List dashboard lists
-```
+- "Search for error logs in the last hour"
+- "Tail logs from the payments service"
+- "Trace this request ID across services"
+- "Show me error patterns from today"
+- "What dashboards do we have?"
+- "Please explain this Datadog dashboard https://app.datadoghq.com/dashboard/xxx-xxx-xxx"
+- "Create a new Datadog dashboard for the metrics cpu.usage, memory.used"
+
+## Commands Reference
+
+| Command | Purpose |
+|---------|---------|
+| `datadog logs search` | Search and filter logs |
+| `datadog logs tail` | Stream logs in real-time |
+| `datadog logs trace` | Find logs for a trace ID |
+| `datadog logs patterns` | Group similar log messages |
+| `datadog logs compare` | Compare current vs previous period |
+| `datadog logs context` | Get logs around a timestamp |
+| `datadog logs agg` | Aggregate logs by facet |
+| `datadog logs multi` | Run multiple queries in parallel |
+| `datadog metrics query` | Query timeseries metrics |
+| `datadog dashboards list` | List dashboards |
+| `datadog dashboards get` | Get dashboard definition |
+| `datadog dashboards create` | Create a dashboard |
+| `datadog dashboards update` | Update a dashboard |
+| `datadog dashboards delete` | Delete a dashboard |
+| `datadog errors` | Quick error summary |
+| `datadog services` | List services with log activity |
+
+See the [datadog-cli](https://github.com/leonardocouy/datadog-cli) repository for complete command documentation.
+
+## License
+
+MIT
