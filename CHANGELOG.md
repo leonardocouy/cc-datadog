@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/leonardocouy/cc-datadog/compare/v1.3.0...v1.4.0) (2025-12-23)
+
+
+### Features
+
+* **datadog-cli:** add warnings and safe workflow for dashboard updates ([539cc07](https://github.com/leonardocouy/cc-datadog/commit/539cc0759d8b15064d35efe82364275a889808d3))
+
 ## [1.3.0](https://github.com/leonardocouy/cc-datadog/compare/v1.2.0...v1.3.0) (2025-12-23)
 
 
