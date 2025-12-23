@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/leonardocouy/cc-datadog/compare/v1.4.0...v1.5.0) (2025-12-23)
+
+
+### Features
+
+* update dashboards references ([df4d40e](https://github.com/leonardocouy/cc-datadog/commit/df4d40ece48dc3840a0e8b1adc7ba631066ed5b6))
+
 ## [1.4.0](https://github.com/leonardocouy/cc-datadog/compare/v1.3.0...v1.4.0) (2025-12-23)
 
 
