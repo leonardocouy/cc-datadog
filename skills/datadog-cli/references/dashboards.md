@@ -1,5 +1,85 @@
 # Dashboards Reference
 
+## ⚠️ CRITICAL: Dashboard Update is DESTRUCTIVE
+
+**The `dashboards update` command REPLACES the entire dashboard, not just the fields you specify.**
+
+If you omit any of these fields during an update, they will be **permanently deleted**:
+- `--template-variables` → Template variables will be removed
+- `--description` → Description will be cleared
+- `--notify-list` → Notify list will be cleared
+
+**Example of DATA LOSS:**
+```bash
+# This will DELETE template variables and description!
+npx @leoflores/datadog-cli dashboards update \
+  --id "abc-def-ghi" \
+  --title "My Dashboard" \
+  --layout ordered \
+  --widgets '[...]'  # Only widgets provided, other fields wiped!
+```
+
+## Safe Dashboard Update Workflow
+
+**ALWAYS follow this 3-step process when updating dashboards:**
+
+### Step 1: Backup the Current Dashboard
+```bash
+# Save the current dashboard state BEFORE any changes
+npx @leoflores/datadog-cli dashboards get --id "abc-def-ghi" > dashboard-backup.json
+```
+
+### Step 2: Modify and Preserve All Fields
+```bash
+# Extract existing values and modify only what you need
+DASHBOARD_JSON=$(npx @leoflores/datadog-cli dashboards get --id "abc-def-ghi")
+
+# Get existing template variables (MUST be preserved!)
+TEMPLATE_VARS=$(echo "$DASHBOARD_JSON" | jq -c '.dashboard.templateVariables // []')
+
+# Get existing description (MUST be preserved!)
+DESCRIPTION=$(echo "$DASHBOARD_JSON" | jq -r '.dashboard.description // ""')
+
+# Modify widgets (example: change title of widget at index 1)
+WIDGETS=$(echo "$DASHBOARD_JSON" | jq -c '.dashboard.widgets | .[1].definition.title = "New Title"')
+
+# Update with ALL fields preserved
+npx @leoflores/datadog-cli dashboards update \
+  --id "abc-def-ghi" \
+  --title "My Dashboard" \
+  --layout ordered \
+  --widgets "$WIDGETS" \
+  --description "$DESCRIPTION" \
+  --template-variables "$TEMPLATE_VARS" \
+  --pretty
+```
+
+### Step 3: Verify the Update
+```bash
+# Confirm all fields are intact
+npx @leoflores/datadog-cli dashboards get --id "abc-def-ghi" --pretty
+```
+
+### Recovery from Accidental Data Loss
+```bash
+# If you have a backup, restore from it
+BACKUP=$(cat dashboard-backup.json)
+WIDGETS=$(echo "$BACKUP" | jq -c '.dashboard.widgets')
+TEMPLATE_VARS=$(echo "$BACKUP" | jq -c '.dashboard.templateVariables // []')
+DESCRIPTION=$(echo "$BACKUP" | jq -r '.dashboard.description // ""')
+TITLE=$(echo "$BACKUP" | jq -r '.dashboard.title')
+LAYOUT=$(echo "$BACKUP" | jq -r '.dashboard.layoutType')
+
+npx @leoflores/datadog-cli dashboards update \
+  --id "abc-def-ghi" \
+  --title "$TITLE" \
+  --layout "$LAYOUT" \
+  --widgets "$WIDGETS" \
+  --description "$DESCRIPTION" \
+  --template-variables "$TEMPLATE_VARS" \
+  --pretty
+```
+
 ## Commands Overview
 
 | Command | Description |
@@ -7,7 +87,7 @@
 | `dashboards list` | List all dashboards |
 | `dashboards get` | Get full dashboard definition |
 | `dashboards create` | Create a new dashboard |
-| `dashboards update` | Update an existing dashboard |
+| `dashboards update` | ⚠️ **DESTRUCTIVE** - Replaces entire dashboard |
 | `dashboards delete` | Delete a dashboard |
 | `dashboard-lists list` | List all dashboard lists |
 | `dashboard-lists get` | Get dashboard list details |
@@ -26,8 +106,9 @@
 | `--title` | create, update | Dashboard title |
 | `--layout` | create, update | `ordered` or `free` |
 | `--widgets` | create, update | Widgets JSON (or stdin) |
-| `--description` | create, update | Dashboard description |
-| `--template-variables` | create, update | Template variables JSON |
+| `--description` | create, update | ⚠️ **Required on update to preserve** |
+| `--template-variables` | create, update | ⚠️ **Required on update to preserve** |
+| `--notify-list` | create, update | ⚠️ **Required on update to preserve** |
 | `--read-only` | create, update | Make read-only |
 
 ## Examples

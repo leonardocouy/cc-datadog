@@ -83,3 +83,37 @@ npx @leoflores/datadog-cli logs multi \
   --queries "api-errors:service:api status:error,payment-errors:service:payment status:error,auth-errors:service:auth status:error" \
   --from 1h --pretty
 ```
+
+## ⚠️ Safe Dashboard Update
+
+**CRITICAL:** Dashboard updates are destructive. Follow this workflow to avoid data loss.
+
+```bash
+# Step 1: ALWAYS backup first
+npx @leoflores/datadog-cli dashboards get --id "abc-def-ghi" > dashboard-backup.json
+
+# Step 2: Extract existing values you want to preserve
+DASHBOARD=$(npx @leoflores/datadog-cli dashboards get --id "abc-def-ghi")
+TEMPLATE_VARS=$(echo "$DASHBOARD" | jq -c '.dashboard.templateVariables // []')
+DESCRIPTION=$(echo "$DASHBOARD" | jq -r '.dashboard.description // ""')
+TITLE=$(echo "$DASHBOARD" | jq -r '.dashboard.title')
+LAYOUT=$(echo "$DASHBOARD" | jq -r '.dashboard.layoutType')
+
+# Step 3: Modify only what you need (example: change widget title)
+WIDGETS=$(echo "$DASHBOARD" | jq -c '.dashboard.widgets | .[1].definition.title = "New Widget Title"')
+
+# Step 4: Update with ALL fields preserved
+npx @leoflores/datadog-cli dashboards update \
+  --id "abc-def-ghi" \
+  --title "$TITLE" \
+  --layout "$LAYOUT" \
+  --widgets "$WIDGETS" \
+  --description "$DESCRIPTION" \
+  --template-variables "$TEMPLATE_VARS" \
+  --pretty
+
+# Step 5: Verify the update preserved everything
+npx @leoflores/datadog-cli dashboards get --id "abc-def-ghi" --pretty
+```
+
+See [dashboards.md](dashboards.md) for complete reference and recovery procedures.

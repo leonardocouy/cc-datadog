@@ -7,6 +7,15 @@ description: Datadog CLI for searching logs, querying metrics, tracing requests,
 
 A CLI tool for AI agents to debug and triage using Datadog logs and metrics.
 
+## Required Reading
+
+**You MUST read the relevant reference docs before using any command:**
+- [Log Commands](references/logs-commands.md)
+- [Metrics](references/metrics.md)
+- [Query Syntax](references/query-syntax.md)
+- [Workflows](references/workflows.md)
+- [Dashboards](references/dashboards.md)
+
 ## Setup
 
 ### Environment Variables (Required)
@@ -47,12 +56,6 @@ npx @leoflores/datadog-cli logs search --query "*" --site datadoghq.eu
 | `dashboards` | Manage dashboards (CRUD) |
 | `dashboard-lists` | Manage dashboard lists |
 
-> **Detailed References:**
-> - [Log Commands](references/logs-commands.md)
-> - [Metrics](references/metrics.md)
-> - [Query Syntax](references/query-syntax.md)
-> - [Workflows](references/workflows.md)
-> - [Dashboards](references/dashboards.md)
 
 ## Quick Examples
 
